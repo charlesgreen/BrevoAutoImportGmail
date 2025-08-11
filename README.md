@@ -1,4 +1,4 @@
-# Brevo Gmail Import Script
+# Brevo Auto Import Gmail
 
 A Google Apps Script that automatically imports email addresses from Gmail messages into Brevo CRM. The script monitors emails with a specific label, extracts contact information, and imports them to Brevo using their API.
 
