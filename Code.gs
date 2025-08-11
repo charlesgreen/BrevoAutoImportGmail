@@ -1,5 +1,5 @@
 /**
- * Brevo Gmail Import Script
+ * Brevo Auto Import Gmail
  * Automatically imports email addresses from Gmail to Brevo CRM
  * 
  * This script:
@@ -10,7 +10,6 @@
  */
 
 // TEMPORARY API KEY - DELETE THIS LINE AFTER RUNNING setupApiKey()
-// This step stores the Brevo API key in properties instead of code.
 const TEMP_API_KEY = 'xkeysib-xxxxxx';
 
 // Constants
