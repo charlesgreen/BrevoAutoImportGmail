@@ -22,16 +22,28 @@ A Google Apps Script that automatically imports email addresses from Gmail messa
 3. Replace the default `Code.gs` content with the provided `Code.gs` file
 4. Add the `appsscript.json` manifest file to configure permissions
 
-### 2. Configure API Key
+### 2. Configure API Key and List ID
 
-Run the `setupApiKey()` function once to securely store your Brevo API key:
+#### API Key Setup
+
+1. Add your Brevo API key to the top of `Code.gs` temporarily:
+   ```javascript
+   const TEMP_API_KEY = 'your-brevo-api-key-here';
+   ```
+
+2. Run the `setupApiKey()` function once to store it securely:
+   ```javascript
+   setupApiKey(); // Stores the API key securely
+   ```
+
+3. **IMPORTANT**: Delete the `TEMP_API_KEY` line from the code after running `setupApiKey()`
+
+#### List Configuration
+
+By default, contacts are added to list #14. To change this, modify the `BREVO_LIST_ID` constant:
 
 ```javascript
-function setupApiKey() {
-  const apiKey = 'your-brevo-api-key-here';
-  PropertiesService.getScriptProperties().setProperty('BREVO_API_KEY', apiKey);
-  console.log('Brevo API key has been stored securely');
-}
+const BREVO_LIST_ID = 14; // Change this to your desired list ID
 ```
 
 ### 3. Set Up Gmail Labels
@@ -83,7 +95,7 @@ Multiple emails in one message
 
 ### Brevo API Details
 
-- **Endpoint**: `https://api-ssl.brevo.com/v3/contacts`
+- **Endpoint**: `https://api.brevo.com/v3/contacts`
 - **Method**: POST
 - **Authentication**: API key in header (`api-key`)
 - **Rate Limiting**: 100ms delay between requests
@@ -97,6 +109,7 @@ Multiple emails in one message
     "FIRSTNAME": "John",
     "LASTNAME": "Doe"
   },
+  "listIds": [14],
   "updateEnabled": true
 }
 ```
@@ -110,6 +123,7 @@ Multiple emails in one message
 - `setupLabels()` - Create Gmail labels
 - `extractEmailAddresses(text)` - Extract emails from text
 - `importContactsToBrevo(contacts)` - Import contacts to Brevo
+- `updateContactList(email, apiKey)` - Update existing contact to add to list
 
 ### Trigger Management
 
@@ -128,6 +142,7 @@ Multiple emails in one message
 The script includes comprehensive error handling:
 
 - **API Errors**: Logged with response details
+- **Duplicate Contacts**: Automatically updates existing contacts to add them to the list
 - **Network Errors**: Caught and logged with retry logic
 - **Parsing Errors**: Individual contact failures don't stop batch processing
 - **Timeout Protection**: Maximum execution time of 4 minutes
@@ -183,6 +198,7 @@ The script requires these OAuth scopes:
 
 This script is designed to be self-contained and production-ready. Modify the constants at the top of the file to customize behavior:
 
+- `BREVO_LIST_ID`: Target list ID for imported contacts (default: 14)
 - `BATCH_SIZE`: Number of emails processed per batch
 - `MAX_PROCESSING_TIME`: Maximum execution time in milliseconds
 - Label names and API endpoints
